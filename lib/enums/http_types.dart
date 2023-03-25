@@ -1,0 +1,4 @@
+enum HttpTypes {
+  https,
+  http,
+}
