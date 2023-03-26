@@ -1,9 +1,16 @@
 import 'dart:developer';
 
+import 'package:api_tester_app/classes/response_class.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
-import 'package:api_tester_app/extensions/map_print_extension.dart';
+import 'package:api_tester_app/functions/delete.dart';
+import 'package:api_tester_app/functions/get.dart';
+import 'package:api_tester_app/functions/post.dart';
+import 'package:api_tester_app/functions/put.dart';
+import 'package:api_tester_app/screens/response_screen.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 import '../classes/debouncer.dart';
 import '../enums/data_type.dart';
@@ -20,6 +27,41 @@ class HomeProvider with ChangeNotifier {
   Map<String, dynamic> _body = {};
   final Map<MapEntry<TextEditingController, TextEditingController>, DataType>
       _bodyControllers = {};
+
+  bool _overallBodyStatus = true;
+  bool _overallUrlStatus = false;
+  String _url = "";
+  bool _isLoading = false;
+
+  void toggleIsLoading() {
+    _isLoading = !_isLoading;
+    notifyListeners();
+  }
+
+  void setUrl() {
+    _url = getIP.isNotEmpty
+        ? "${getHttpType.name}://${"$getIP/"}$getEndpoint"
+        : "${getHttpType.name}://$getIP";
+    if (getIP.isNotEmpty &&
+        getEndpoint.isNotEmpty &&
+        getEndpoint.substring(0, 1) != '/' &&
+        getIP.substring(getIP.length - 1, getIP.length) != '/' &&
+        Uri.tryParse(_url) != null) {
+      _overallUrlStatus = true;
+    } else {
+      _overallUrlStatus = false;
+    }
+  }
+
+  void setOverallBodyStatus({required bool status}) {
+    _overallBodyStatus = status;
+    notifyListeners();
+  }
+
+  void setOverallUrlStatus({required bool status}) {
+    _overallUrlStatus = status;
+    notifyListeners();
+  }
 
   void addHeaderController() {
     TextEditingController keyController = TextEditingController();
@@ -92,9 +134,11 @@ class HomeProvider with ChangeNotifier {
 
   void updateBodyControllerDataType(
       {required DataType dataType,
+      required BuildContext context,
       required MapEntry<TextEditingController, TextEditingController> key}) {
     _bodyControllers.update(key, (value) => dataType);
-    notifyListeners();
+    setBody(context: context);
+    //notifyListeners();
   }
 
   void setBody({required BuildContext context}) {
@@ -117,20 +161,12 @@ class HomeProvider with ChangeNotifier {
               newBody.putIfAbsent(key, () => value.toString());
               break;
             case DataType.list:
-              newBody.putIfAbsent(key, () => value as List);
+              newBody.putIfAbsent(key, () => value.split(','));
               break;
           }
+          setOverallBodyStatus(status: true);
         } catch (error) {
-          Future.delayed(const Duration(seconds: 1), () {
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  "$value is not a ${e.value.name}",
-                ),
-              ),
-            );
-          });
+          setOverallBodyStatus(status: false);
         }
       }
     }
@@ -145,17 +181,61 @@ class HomeProvider with ChangeNotifier {
 
   void setHttpType({required HttpTypes type}) {
     _httpType = type;
+    setUrl();
     notifyListeners();
   }
 
   void setIP({required String ip}) {
     _ip = ip;
+    setUrl();
     notifyListeners();
   }
 
   void setEndpoint({required String endpoint}) {
     _endpoint = endpoint;
+    setUrl();
+
     notifyListeners();
+  }
+
+  Future<Either<bool, APIResponse>> test(
+      {required BuildContext context}) async {
+    APIResponse response;
+    toggleIsLoading();
+
+    if (getOverAllBodyStatus == false) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Invalid url")));
+      toggleIsLoading();
+
+      return const Left(false);
+    } else if (getOverAllBodyStatus == false) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Invalid body")));
+      toggleIsLoading();
+
+      return const Left(false);
+    }
+
+    switch (getMethod) {
+      case RequestTypes.get:
+        response = await getAPIMethod(url: getUrl, headers: getHeader);
+        break;
+      case RequestTypes.post:
+        response =
+            await postAPIMethod(url: getUrl, headers: getHeader, body: getBody);
+        break;
+      case RequestTypes.put:
+        response =
+            await putAPIMethod(url: getUrl, headers: getHeader, body: getBody);
+        break;
+      case RequestTypes.delete:
+        response = await deleteAPIMethod(
+            url: getUrl, headers: getHeader, body: getBody);
+        break;
+    }
+    toggleIsLoading();
+    return Right(response);
   }
 
   HttpTypes get getHttpType => _httpType;
@@ -169,4 +249,8 @@ class HomeProvider with ChangeNotifier {
   Map<String, dynamic> get getBody => _body;
   Map<MapEntry<TextEditingController, TextEditingController>, DataType>
       get getBodyControllers => _bodyControllers;
+  bool get getOverAllBodyStatus => _overallBodyStatus;
+  bool get getOverAllUrlStatus => _overallUrlStatus;
+  String get getUrl => _url;
+  bool get getIsLoading => _isLoading;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static Color primaryColor = const Color(0xff540b0e);
+  static const Color primaryColor = Color(0xff540b0e);
   static const Color buttonTextColor = Colors.white;
   static const Color textButtonColor = Colors.blueGrey;
   static const Color appBarBackgroundColor = Colors.transparent;

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:api_tester_app/classes/response_class.dart';
 import 'package:http/http.dart' as http;
 
-Future<APIResponse> putMethod({
+Future<APIResponse> putAPIMethod({
   required String url,
   required Map<String, String> headers,
   required Map<String, dynamic> body,
