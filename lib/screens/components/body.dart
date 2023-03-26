@@ -1,6 +1,7 @@
 import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/enums/data_type.dart';
 import 'package:api_tester_app/extensions/map_print_extension.dart';
+import 'package:api_tester_app/screens/components/check.dart';
 import 'package:api_tester_app/screens/components/custom_drop_down.dart';
 import 'package:api_tester_app/screens/components/key_value_row.dart';
 import 'package:api_tester_app/screens/components/title_text.dart';
@@ -21,7 +22,18 @@ class BodyComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const TitleText(title: "Body"),
+            Row(
+              children: [
+                const TitleText(title: "Body"),
+                Consumer<HomeProvider>(
+                  builder: (context, value, child) => StatusCheck(
+                      isTrue: value.getOverAllBodyStatus,
+                      message: value.getOverAllBodyStatus
+                          ? "Valid body"
+                          : "Invalid body"),
+                ),
+              ],
+            ),
             TextButton(
               onPressed: () {
                 Provider.of<HomeProvider>(context, listen: false)
@@ -75,6 +87,7 @@ class BodyComponent extends StatelessWidget {
                               .toList(),
                           onChanged: (DataType? newDatatype) {
                             value.updateBodyControllerDataType(
+                                context: context,
                                 dataType: newDatatype ?? DataType.string,
                                 key: e.key);
                           }),

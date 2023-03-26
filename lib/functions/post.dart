@@ -1,18 +1,20 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:api_tester_app/classes/response_class.dart';
 import 'package:http/http.dart' as http;
 
-Future<APIResponse> postMethod({
+Future<APIResponse> postAPIMethod({
   required String url,
   required Map<String, String> headers,
   required Map<String, dynamic> body,
 }) async {
   try {
+    log(body.toString());
     final response = await http.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(body),
+      body: body,
     );
 
     return APIResponse(

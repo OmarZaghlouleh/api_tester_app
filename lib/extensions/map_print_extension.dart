@@ -1,6 +1,6 @@
 extension MapPrintExtension on Map {
   String print() {
-    String openBracket = "{\n";
+    String openBracket = "\n{\n";
     String closeBracket = "{";
     String data = "";
     for (var element in entries) {

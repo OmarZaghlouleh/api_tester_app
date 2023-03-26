@@ -17,30 +17,38 @@ class KeyValueRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: CustomTextField(
-              label: "Key",
-              prefix: null,
-              controller: keyController,
-              hintText: "",
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(":"),
-          ),
-          if (isValueList == false)
-            Expanded(
-              child: CustomTextField(
-                textInputType: textInputType,
-                label: "Value",
-                prefix: null,
-                controller: valueController,
-                hintText: "",
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  label: "Key",
+                  prefix: null,
+                  controller: keyController,
+                  hintText: "",
+                ),
               ),
-            )
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(":"),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  textInputType: textInputType,
+                  label: "Value",
+                  prefix: null,
+                  controller: valueController,
+                  hintText: "",
+                ),
+              )
+            ],
+          ),
+          if (isValueList == true)
+            const Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Text("split each item with ','  e.g. 1,2,3"),
+            ),
         ],
       ),
     );

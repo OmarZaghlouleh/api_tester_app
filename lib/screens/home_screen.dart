@@ -2,16 +2,15 @@ import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
 import 'package:api_tester_app/extensions/int_extension.dart';
-import 'package:api_tester_app/extensions/map_print_extension.dart';
+import 'package:api_tester_app/screens/components/action_button.dart';
 import 'package:api_tester_app/screens/components/body.dart';
+import 'package:api_tester_app/screens/components/check.dart';
 import 'package:api_tester_app/screens/components/custom_drop_down.dart';
 import 'package:api_tester_app/screens/components/custom_text_field.dart';
 import 'package:api_tester_app/screens/components/header.dart';
-import 'package:api_tester_app/screens/components/key_value_row.dart';
-import 'package:api_tester_app/screens/components/modal_bottom_sheet.dart';
 import 'package:api_tester_app/screens/components/title_text.dart';
+import 'package:api_tester_app/screens/response_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
-import 'package:api_tester_app/utils/shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -53,24 +52,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          boxShadow: CustomShadow.shadows,
-          shape: BoxShape.circle,
-          color: AppColors.primaryColor,
-          //borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Center(
-          child: Text(
-            "Test",
-            style: TextStyle(
-              color: AppColors.buttonTextColor,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
+      floatingActionButton: ActionButton(
+        function: () async {
+          final result = await Provider.of<HomeProvider>(context, listen: false)
+              .test(context: context);
+          result.fold((l) {}, (r) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResponseScreen(response: r),
+              ),
+            );
+          });
+        },
+        title: "Test",
       ),
       appBar: AppBar(
         leading: Padding(
@@ -94,7 +89,18 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TitleText(title: "URL"),
+              Row(
+                children: [
+                  const TitleText(title: "URL"),
+                  Consumer<HomeProvider>(
+                    builder: (context, value, child) => StatusCheck(
+                        isTrue: value.getOverAllUrlStatus,
+                        message: value.getOverAllUrlStatus
+                            ? "Valid url"
+                            : "Invalid url"),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   Consumer<HomeProvider>(
@@ -139,14 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   prefix: null,
                   controller: _endpointController,
                   hintText: "e.g. user/register"),
-              // 20.wh(),
-              // Consumer<HomeProvider>(
-              //   builder: (context, value, child) => Text(
-              //     value.getIP.isNotEmpty
-              //         ? "URL: ${value.getHttpType.name}://${"${value.getIP}/"}${value.getEndpoint}"
-              //         : "URL: ${value.getHttpType.name}://${value.getIP}",
-              //   ),
-              // ),
+              20.wh(),
+              Consumer<HomeProvider>(
+                builder: (context, value, child) => Text(
+                  value.getUrl,
+                ),
+              ),
               20.wh(),
               Row(
                 children: [
@@ -191,7 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               20.wh(),
               const HeaderComponent(),
-              const BodyComponent(),
+              Consumer<HomeProvider>(
+                  builder: (context, value, child) =>
+                      value.getMethod == RequestTypes.get
+                          ? const SizedBox.shrink()
+                          : const BodyComponent()),
             ],
           ),
         ),
