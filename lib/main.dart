@@ -1,11 +1,17 @@
+import 'package:api_tester_app/controllers/history_provider.dart';
 import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/screens/home_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
+import 'package:api_tester_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox(AppConstants.historyBox);
+  //await Hive.box(AppConstants.historyBox).clear();
   runApp(const APITester());
 }
 
@@ -17,6 +23,7 @@ class APITester extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => HistoryProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

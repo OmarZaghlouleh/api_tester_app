@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:api_tester_app/classes/request_class.dart';
 import 'package:api_tester_app/classes/response_class.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
@@ -7,31 +8,58 @@ import 'package:api_tester_app/functions/delete.dart';
 import 'package:api_tester_app/functions/get.dart';
 import 'package:api_tester_app/functions/post.dart';
 import 'package:api_tester_app/functions/put.dart';
-import 'package:api_tester_app/screens/response_screen.dart';
+import 'package:api_tester_app/functions/storage_functions.dart';
+import 'package:api_tester_app/functions/test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-
-import '../classes/debouncer.dart';
 import '../enums/data_type.dart';
 
 class HomeProvider with ChangeNotifier {
   HttpTypes _httpType = HttpTypes.values.first;
   String _ip = "";
   String _endpoint = "";
-  RequestTypes _method = RequestTypes.get;
-  Map<String, String> _header = {};
+  //RequestTypes _method = RequestTypes.get;
   final Map<TextEditingController, TextEditingController> _headerControllers =
       {};
-
-  Map<String, dynamic> _body = {};
   final Map<MapEntry<TextEditingController, TextEditingController>, DataType>
       _bodyControllers = {};
 
+  final Map<TextEditingController, TextEditingController>
+      _parametersControllers = {};
+
   bool _overallBodyStatus = true;
   bool _overallUrlStatus = false;
-  String _url = "";
   bool _isLoading = false;
+  String _parameters = "";
+
+  final APIRequest _apiRequest = APIRequest.empty();
+
+  void toggleEncodedBody() {
+    getRequestData.encodeBody = !getRequestData.encodeBody;
+    notifyListeners();
+  }
+
+  void setParameters() {
+    _parameters = "";
+    String parameter = "";
+    for (int i = 0; i < _parametersControllers.entries.length; i++) {
+      final String key =
+          _parametersControllers.entries.elementAt(i).key.text.trim();
+      final String value =
+          _parametersControllers.entries.elementAt(i).value.text.trim();
+
+      parameter = "${key}=$value";
+      if (i == 0) {
+        parameter = "?$parameter";
+      } else {
+        parameter = "&$parameter";
+      }
+      if (key.isNotEmpty && value.isNotEmpty) _parameters += parameter;
+    }
+    log(getParameters);
+
+    //notifyListeners();
+  }
 
   void toggleIsLoading() {
     _isLoading = !_isLoading;
@@ -39,18 +67,22 @@ class HomeProvider with ChangeNotifier {
   }
 
   void setUrl() {
-    _url = getIP.isNotEmpty
+    _apiRequest.url = getIP.isNotEmpty
         ? "${getHttpType.name}://${"$getIP/"}$getEndpoint"
         : "${getHttpType.name}://$getIP";
+    setParameters();
+    _apiRequest.url += getParameters;
     if (getIP.isNotEmpty &&
         getEndpoint.isNotEmpty &&
         getEndpoint.substring(0, 1) != '/' &&
         getIP.substring(getIP.length - 1, getIP.length) != '/' &&
-        Uri.tryParse(_url) != null) {
+        Uri.tryParse(_apiRequest.url) != null) {
       _overallUrlStatus = true;
     } else {
       _overallUrlStatus = false;
     }
+
+    notifyListeners();
   }
 
   void setOverallBodyStatus({required bool status}) {
@@ -68,28 +100,43 @@ class HomeProvider with ChangeNotifier {
     TextEditingController valueController = TextEditingController();
 
     keyController.addListener(() {
-      final _debouncer = Debouncer(milliseconds: 500);
-
-      _debouncer.run(() {
-        setHeader();
-      });
+      setHeader();
     });
 
     valueController.addListener(() {
-      final _debouncer = Debouncer(milliseconds: 500);
-
-      _debouncer.run(() {
-        setHeader();
-      });
+      setHeader();
     });
 
     _headerControllers.putIfAbsent(keyController, () => valueController);
     notifyListeners();
   }
 
+  void addParametersController() {
+    TextEditingController keyController = TextEditingController();
+    TextEditingController valueController = TextEditingController();
+
+    keyController.addListener(() {
+      setUrl();
+    });
+
+    valueController.addListener(() {
+      setUrl();
+    });
+
+    _parametersControllers.putIfAbsent(keyController, () => valueController);
+    notifyListeners();
+  }
+
+  void deleteParametersController({required TextEditingController key}) {
+    _parametersControllers.remove(key);
+    _apiRequest.parameters.remove(key.text.trim());
+    setUrl();
+    // notifyListeners();
+  }
+
   void deleteHeaderController({required TextEditingController key}) {
     _headerControllers.remove(key);
-    _header.remove(key.text.trim());
+    _apiRequest.header.remove(key.text.trim());
     notifyListeners();
   }
 
@@ -98,14 +145,10 @@ class HomeProvider with ChangeNotifier {
     TextEditingController valueController = TextEditingController();
 
     keyController.addListener(() {
-      final _debouncer = Debouncer(milliseconds: 1000);
-
       setBody(context: context);
     });
 
     valueController.addListener(() {
-      final _debouncer = Debouncer(milliseconds: 1000);
-
       setBody(context: context);
     });
 
@@ -117,7 +160,7 @@ class HomeProvider with ChangeNotifier {
   void deleteBodyController(
       {required MapEntry<TextEditingController, TextEditingController> key}) {
     _bodyControllers.remove(key);
-    _body.remove(key.key.text.trim());
+    _apiRequest.body.remove(key.key.text.trim());
     notifyListeners();
   }
 
@@ -128,7 +171,7 @@ class HomeProvider with ChangeNotifier {
       String value = e.value.text.trim();
       newHeader.putIfAbsent(key, () => value);
     }
-    _header = newHeader;
+    _apiRequest.header = newHeader;
     notifyListeners();
   }
 
@@ -138,7 +181,6 @@ class HomeProvider with ChangeNotifier {
       required MapEntry<TextEditingController, TextEditingController> key}) {
     _bodyControllers.update(key, (value) => dataType);
     setBody(context: context);
-    //notifyListeners();
   }
 
   void setBody({required BuildContext context}) {
@@ -152,10 +194,10 @@ class HomeProvider with ChangeNotifier {
         try {
           switch (e.value) {
             case DataType.int:
-              newBody.putIfAbsent(key, () => int.parse(value));
+              newBody.putIfAbsent(key, () => int.parse(value).toString());
               break;
             case DataType.double:
-              newBody.putIfAbsent(key, () => double.parse(value));
+              newBody.putIfAbsent(key, () => double.parse(value).toString());
               break;
             case DataType.string:
               newBody.putIfAbsent(key, () => value.toString());
@@ -170,37 +212,32 @@ class HomeProvider with ChangeNotifier {
         }
       }
     }
-    _body = newBody;
+    _apiRequest.body = newBody;
     notifyListeners();
   }
 
   void setMethod({required RequestTypes method}) {
-    _method = method;
+    _apiRequest.method = method;
     notifyListeners();
   }
 
   void setHttpType({required HttpTypes type}) {
     _httpType = type;
     setUrl();
-    notifyListeners();
   }
 
   void setIP({required String ip}) {
     _ip = ip;
     setUrl();
-    notifyListeners();
   }
 
   void setEndpoint({required String endpoint}) {
     _endpoint = endpoint;
     setUrl();
-
-    notifyListeners();
   }
 
   Future<Either<bool, APIResponse>> test(
       {required BuildContext context}) async {
-    APIResponse response;
     toggleIsLoading();
 
     if (getOverAllBodyStatus == false) {
@@ -216,24 +253,8 @@ class HomeProvider with ChangeNotifier {
 
       return const Left(false);
     }
+    final response = await testAPI(request: getRequestData);
 
-    switch (getMethod) {
-      case RequestTypes.get:
-        response = await getAPIMethod(url: getUrl, headers: getHeader);
-        break;
-      case RequestTypes.post:
-        response =
-            await postAPIMethod(url: getUrl, headers: getHeader, body: getBody);
-        break;
-      case RequestTypes.put:
-        response =
-            await putAPIMethod(url: getUrl, headers: getHeader, body: getBody);
-        break;
-      case RequestTypes.delete:
-        response = await deleteAPIMethod(
-            url: getUrl, headers: getHeader, body: getBody);
-        break;
-    }
     toggleIsLoading();
     return Right(response);
   }
@@ -241,16 +262,17 @@ class HomeProvider with ChangeNotifier {
   HttpTypes get getHttpType => _httpType;
   String get getIP => _ip;
   String get getEndpoint => _endpoint;
-  RequestTypes get getMethod => _method;
-  Map<String, String> get getHeader => _header;
+
+  APIRequest get getRequestData => _apiRequest;
   Map<TextEditingController, TextEditingController> get getHeaderControllers =>
       _headerControllers;
+  Map<TextEditingController, TextEditingController>
+      get getParametersControllers => _parametersControllers;
 
-  Map<String, dynamic> get getBody => _body;
   Map<MapEntry<TextEditingController, TextEditingController>, DataType>
       get getBodyControllers => _bodyControllers;
   bool get getOverAllBodyStatus => _overallBodyStatus;
   bool get getOverAllUrlStatus => _overallUrlStatus;
-  String get getUrl => _url;
   bool get getIsLoading => _isLoading;
+  String get getParameters => _parameters;
 }

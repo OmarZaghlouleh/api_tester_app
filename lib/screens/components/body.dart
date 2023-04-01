@@ -47,6 +47,19 @@ class BodyComponent extends StatelessWidget {
           ],
         ),
         Consumer<HomeProvider>(
+          builder: (context, value, child) => CheckboxListTile(
+            title: const Text(
+              "Encode body",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            activeColor: AppColors.accentColor,
+            value: value.getRequestData.encodeBody,
+            onChanged: (_) {
+              value.toggleEncodedBody();
+            },
+          ),
+        ),
+        Consumer<HomeProvider>(
           builder: (context, value, child) => ListBody(
             children: value.getBodyControllers.entries
                 .map(
@@ -106,15 +119,6 @@ class BodyComponent extends StatelessWidget {
                   ),
                 )
                 .toList(),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(14),
-          child: Consumer<HomeProvider>(
-            builder: (context, value, child) => Text(
-              value.getBody.isEmpty ? "" : "body: ${value.getBody.print()}",
-              textAlign: TextAlign.start,
-            ),
           ),
         ),
       ],

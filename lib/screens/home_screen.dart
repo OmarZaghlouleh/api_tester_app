@@ -2,17 +2,21 @@ import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
 import 'package:api_tester_app/extensions/int_extension.dart';
+import 'package:api_tester_app/extensions/map_print_extension.dart';
 import 'package:api_tester_app/screens/components/action_button.dart';
+import 'package:api_tester_app/screens/components/app_bar.dart';
 import 'package:api_tester_app/screens/components/body.dart';
 import 'package:api_tester_app/screens/components/check.dart';
 import 'package:api_tester_app/screens/components/custom_drop_down.dart';
 import 'package:api_tester_app/screens/components/custom_text_field.dart';
 import 'package:api_tester_app/screens/components/header.dart';
+import 'package:api_tester_app/screens/components/parameters.dart';
+import 'package:api_tester_app/screens/components/request_row.dart';
 import 'package:api_tester_app/screens/components/title_text.dart';
+import 'package:api_tester_app/screens/history_screen.dart';
 import 'package:api_tester_app/screens/response_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,35 +56,43 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: ActionButton(
-        function: () async {
-          final result = await Provider.of<HomeProvider>(context, listen: false)
-              .test(context: context);
-          result.fold((l) {}, (r) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ResponseScreen(response: r),
-              ),
-            );
-          });
-        },
-        title: "Test",
+      floatingActionButton: Consumer<HomeProvider>(
+        builder: (context, value, child) => ActionButton(
+          isLoading: value.getIsLoading,
+          function: () async {
+            final result =
+                await Provider.of<HomeProvider>(context, listen: false)
+                    .test(context: context);
+            result.fold((l) {}, (r) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResponseScreen(response: r),
+                ),
+              );
+            });
+          },
+          title: "Test",
+        ),
       ),
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 8, left: 20, bottom: 8),
-          child: Image.asset("assets/icons/api-icon.png"),
-        ),
-        title: Text(
-          "API Tester",
-          style: GoogleFonts.bungee(
-            color: AppColors.primaryColor,
-            fontSize: 18,
-          ),
-        ),
-        backgroundColor: AppColors.appBarBackgroundColor,
-        elevation: 0,
+      appBar: customAppBar(
+        title: "API Tester",
+        isLeadingActive: false,
+        context: context,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HistoryScreen()));
+            },
+            icon: const Icon(
+              Icons.history,
+              color: AppColors.primaryColor,
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -146,11 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   controller: _endpointController,
                   hintText: "e.g. user/register"),
               20.wh(),
-              Consumer<HomeProvider>(
-                builder: (context, value, child) => Text(
-                  value.getUrl,
-                ),
-              ),
+              const ParametersComponent(),
               20.wh(),
               Row(
                 children: [
@@ -163,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: CustomDropDownButton<RequestTypes>(
-                            value: value.getMethod,
+                            value: value.getRequestData.method,
                             items: RequestTypes.values
                                 .map(
                                   (method) => DropdownMenuItem<RequestTypes>(
@@ -174,7 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .dropdownMenuTheme
                                           .textStyle!
                                           .copyWith(
-                                            color: value.getMethod == method
+                                            color: value.getRequestData.method ==
+                                                    method
                                                 ? AppColors
                                                     .dropDownSelectedColor
                                                 : AppColors
@@ -196,10 +205,35 @@ class _HomeScreenState extends State<HomeScreen> {
               20.wh(),
               const HeaderComponent(),
               Consumer<HomeProvider>(
-                  builder: (context, value, child) =>
-                      value.getMethod == RequestTypes.get
-                          ? const SizedBox.shrink()
-                          : const BodyComponent()),
+                builder: (context, value, child) =>
+                    value.getRequestData.method == RequestTypes.get
+                        ? const SizedBox.shrink()
+                        : const BodyComponent(),
+              ),
+              const Divider(
+                  color: AppColors.primaryColor, endIndent: 50, indent: 50),
+              const TitleText(title: "Request:"),
+              Consumer<HomeProvider>(
+                builder: (context, value, child) => Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      if (value.getRequestData.url.isNotEmpty)
+                        RequestRow(
+                            title: "URL: ", data: value.getRequestData.url),
+                      if (value.getRequestData.header.isNotEmpty)
+                        RequestRow(
+                            title: "Header: ",
+                            data: value.getRequestData.header.print()),
+                      if (value.getRequestData.body.isNotEmpty)
+                        RequestRow(
+                            title: "Body: ",
+                            data: value.getRequestData.body.print()),
+                    ],
+                  ),
+                ),
+              ),
+              75.wh(),
             ],
           ),
         ),
