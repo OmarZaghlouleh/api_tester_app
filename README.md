@@ -1,6 +1,6 @@
 # API Tester App
 
-A new Flutter application to test your API and see the response.
+A new mobile and desktop application to test your API and see the response.
 
 # Methods
 1- GET
