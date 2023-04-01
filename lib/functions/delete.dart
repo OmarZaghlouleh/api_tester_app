@@ -1,23 +1,21 @@
 import 'dart:convert';
 
+import 'package:api_tester_app/classes/request_class.dart';
 import 'package:api_tester_app/classes/response_class.dart';
+import 'package:api_tester_app/functions/try_decode.dart';
 import 'package:http/http.dart' as http;
 
-Future<APIResponse> deleteAPIMethod({
-  required String url,
-  required Map<String, String> headers,
-  required Map<String, dynamic> body,
-}) async {
+Future<APIResponse> deleteAPIMethod({required APIRequest request}) async {
   try {
     final response = await http.delete(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(body),
+      Uri.parse(request.url),
+      headers: request.header.cast(),
+      body: request.encodeBody ? jsonEncode(request.body) : request.body,
     );
 
     return APIResponse(
         statusCode: response.statusCode,
-        body: response.body,
+        body: tryDecode(value: response.body),
         isException: false);
   } catch (e) {
     return APIResponse(statusCode: -1, body: e.toString(), isException: true);

@@ -5,16 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({super.key, required this.title, required this.function});
+  const ActionButton(
+      {super.key,
+      required this.title,
+      required this.function,
+      required this.isLoading});
 
   final String title;
   final Function function;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        await function();
+        if (isLoading == false) await function();
       },
       child: Container(
         width: 50,
@@ -25,25 +30,23 @@ class ActionButton extends StatelessWidget {
           color: AppColors.primaryColor,
           //borderRadius: BorderRadius.circular(8),
         ),
-        child: Consumer<HomeProvider>(
-          builder: (context, value, child) => value.getIsLoading
-              ? const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1,
-                    color: Colors.white,
-                  ),
-                )
-              : Center(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: AppColors.buttonTextColor,
-                      fontWeight: FontWeight.w500,
-                    ),
+        child: isLoading
+            ? const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                  color: Colors.white,
+                ),
+              )
+            : Center(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.buttonTextColor,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-        ),
+              ),
       ),
     );
   }
