@@ -13,4 +13,6 @@ class AppColors {
   static const Color requestTitleColor = accentColor;
   static const Color errorColor = Colors.red;
   static const Color successColor = Colors.green;
+  static Color drawerColor = primaryColor.withOpacity(0.5);
+  static const Color drawerTextColor = Colors.white70;
 }

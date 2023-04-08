@@ -9,6 +9,7 @@ import 'package:api_tester_app/screens/components/body.dart';
 import 'package:api_tester_app/screens/components/check.dart';
 import 'package:api_tester_app/screens/components/custom_drop_down.dart';
 import 'package:api_tester_app/screens/components/custom_text_field.dart';
+import 'package:api_tester_app/screens/components/drawer.dart';
 import 'package:api_tester_app/screens/components/header.dart';
 import 'package:api_tester_app/screens/components/parameters.dart';
 import 'package:api_tester_app/screens/components/request_row.dart';
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: Consumer<HomeProvider>(
@@ -79,20 +81,17 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "API Tester",
         isLeadingActive: false,
         context: context,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const HistoryScreen()));
-            },
-            icon: const Icon(
-              Icons.history,
-              color: AppColors.primaryColor,
-            ),
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+
+        //     },
+        //     icon: const Icon(
+        //       Icons.history,
+        //       color: AppColors.primaryColor,
+        //     ),
+        //   )
+        // ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -145,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: CustomTextField(
                         label: "IP",
+                        suffix: null,
                         prefix: null,
                         controller: _ipController,
                         hintText: "e.g. 127.0.0.1:8000 , localhost:8000,..."),
@@ -155,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               CustomTextField(
                   label: "Endpoint",
                   prefix: null,
+                  suffix: null,
                   controller: _endpointController,
                   hintText: "e.g. user/register"),
               20.wh(),

@@ -27,12 +27,14 @@ void showCustomModalBottomSheet({required BuildContext context}) {
             CustomTextField(
                 label: "Key",
                 prefix: null,
+                suffix: null,
                 controller: _keyController,
                 hintText: ""),
             10.wh(),
             CustomTextField(
                 label: "Value",
                 prefix: null,
+                suffix: null,
                 controller: _valueController,
                 hintText: ""),
             15.wh(),

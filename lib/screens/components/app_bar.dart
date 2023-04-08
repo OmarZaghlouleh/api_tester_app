@@ -10,13 +10,14 @@ PreferredSizeWidget customAppBar({
 }) {
   return AppBar(
     actions: actions,
-    leading: InkWell(
-      onTap: isLeadingActive ? () => Navigator.pop(context) : null,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8, left: 20, bottom: 8),
-        child: Image.asset("assets/icons/api-icon.png"),
-      ),
-    ),
+    iconTheme: const IconThemeData(color: AppColors.errorColor),
+    // leading: InkWell(
+    //   onTap: isLeadingActive ? () => Navigator.pop(context) : null,
+    //   child: Padding(
+    //     padding: const EdgeInsets.only(top: 8, left: 20, bottom: 8),
+    //     child: Image.asset("assets/icons/api-icon.png"),
+    //   ),
+    // ),
     title: Text(
       title,
       style: GoogleFonts.bungee(
