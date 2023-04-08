@@ -25,6 +25,7 @@ class KeyValueRow extends StatelessWidget {
                 child: CustomTextField(
                   label: "Key",
                   prefix: null,
+                  suffix: null,
                   controller: keyController,
                   hintText: "",
                 ),
@@ -37,6 +38,7 @@ class KeyValueRow extends StatelessWidget {
                 child: CustomTextField(
                   textInputType: textInputType,
                   label: "Value",
+                  suffix: null,
                   prefix: null,
                   controller: valueController,
                   hintText: "",

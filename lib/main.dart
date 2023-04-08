@@ -1,3 +1,4 @@
+import 'package:api_tester_app/controllers/groups_provider.dart';
 import 'package:api_tester_app/controllers/history_provider.dart';
 import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/screens/home_screen.dart';
@@ -11,7 +12,10 @@ import 'package:provider/provider.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox(AppConstants.historyBox);
+  await Hive.openBox(AppConstants.groupsBox);
   //await Hive.box(AppConstants.historyBox).clear();
+  //await Hive.box(AppConstants.groupsBox).clear();
+
   runApp(const APITester());
 }
 
@@ -24,6 +28,7 @@ class APITester extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => HomeProvider()),
         ChangeNotifierProvider(create: (context) => HistoryProvider()),
+        ChangeNotifierProvider(create: (context) => GroupsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
