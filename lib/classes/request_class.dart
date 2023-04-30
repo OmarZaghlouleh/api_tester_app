@@ -19,7 +19,7 @@ class APIRequest {
       encodeBody: false,
       method: RequestTypes.get);
 
-  factory APIRequest.fromJson(Map<String, dynamic> json) {
+  factory APIRequest.fromJson(Map<dynamic, dynamic> json) {
     //json = json.cast<String, dynamic>();
     //log(json['parameters'].runtimeType.toString());
     return APIRequest(

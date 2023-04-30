@@ -1,4 +1,5 @@
 import 'package:api_tester_app/utils/colors.dart';
+import 'package:api_tester_app/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,10 +16,9 @@ class RequestTitleText extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           "- $title",
-          style: GoogleFonts.lalezar(
-            color: AppColors.requestTitleColor,
-            //fontWeight: FontWeight.w600,
+          style: appTextStyle(
             fontSize: 18,
+            color: AppColors.requestTitleColor,
           ),
         ),
       ),

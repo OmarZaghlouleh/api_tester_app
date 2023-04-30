@@ -19,7 +19,7 @@ class HeaderComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const TitleText(title: "Header"),
+            TitleText(title: "Header"),
             TextButton(
               onPressed: () {
                 Provider.of<HomeProvider>(context, listen: false)

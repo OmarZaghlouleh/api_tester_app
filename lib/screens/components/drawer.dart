@@ -1,11 +1,14 @@
-import 'package:api_tester_app/screens/groups_screen.dart';
+import 'package:api_tester_app/screens/group/groups_screen.dart';
+import 'package:api_tester_app/utils/assets.dart';
 import 'package:api_tester_app/utils/colors.dart';
+import 'package:api_tester_app/utils/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../enums/icon_size.dart';
 import '../history_screen.dart';
+import 'app_icon.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -25,11 +28,11 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
+            const Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Image.asset("assets/icons/api-icon.png"),
+                padding: EdgeInsets.all(20),
+                child: AppIcon(appIconSize: AppIconSize.small),
               ),
             ),
             Expanded(
@@ -44,9 +47,9 @@ class CustomDrawer extends StatelessWidget {
                 },
                 title: Text(
                   "History",
-                  style: GoogleFonts.lalezar(
-                    color: AppColors.drawerTextColor,
+                  style: appTextStyle(
                     fontSize: 18,
+                    color: AppColors.drawerTextColor,
                   ),
                 ),
                 trailing: const Icon(
@@ -67,9 +70,9 @@ class CustomDrawer extends StatelessWidget {
                 },
                 title: Text(
                   "Groups",
-                  style: GoogleFonts.lalezar(
-                    color: AppColors.drawerTextColor,
+                  style: appTextStyle(
                     fontSize: 18,
+                    color: AppColors.drawerTextColor,
                   ),
                 ),
                 trailing: const Icon(

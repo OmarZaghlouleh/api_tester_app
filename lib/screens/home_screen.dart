@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:api_tester_app/controllers/groups_provider.dart';
 import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
@@ -14,14 +17,21 @@ import 'package:api_tester_app/screens/components/header.dart';
 import 'package:api_tester_app/screens/components/parameters.dart';
 import 'package:api_tester_app/screens/components/request_row.dart';
 import 'package:api_tester_app/screens/components/title_text.dart';
-import 'package:api_tester_app/screens/history_screen.dart';
 import 'package:api_tester_app/screens/response_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen(
+      {this.addToFolder = false,
+      this.folderName = "",
+      this.groupName = "",
+      super.key});
+
+  bool addToFolder = false;
+  String folderName = "";
+  String groupName = "";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -55,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomDrawer(),
+      drawer: widget.addToFolder ? null : const CustomDrawer(),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: Consumer<HomeProvider>(
@@ -65,7 +75,16 @@ class _HomeScreenState extends State<HomeScreen> {
             final result =
                 await Provider.of<HomeProvider>(context, listen: false)
                     .test(context: context);
-            result.fold((l) {}, (r) {
+            result.fold((l) {}, (r) async {
+              if (widget.addToFolder) {
+                await Provider.of<GroupsProvider>(context, listen: false)
+                    .addTestToFolder(
+                        folderName: widget.folderName,
+                        groupName: widget.groupName,
+                        apiRequest: value.getRequestData,
+                        apiResponse: r,
+                        context: context);
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -102,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Row(
                 children: [
-                  const TitleText(title: "URL"),
+                  TitleText(title: "URL"),
                   Consumer<HomeProvider>(
                     builder: (context, value, child) => StatusCheck(
                         isTrue: value.getOverAllUrlStatus,
@@ -163,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
               20.wh(),
               Row(
                 children: [
-                  const TitleText(title: "Method"),
+                  TitleText(title: "Method"),
                   Consumer<HomeProvider>(
                     builder: (context, value, child) => Row(
                       children: [
@@ -213,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const Divider(
                   color: AppColors.primaryColor, endIndent: 50, indent: 50),
-              const TitleText(title: "Request:"),
+              TitleText(title: "Request:"),
               Consumer<HomeProvider>(
                 builder: (context, value, child) => Padding(
                   padding: const EdgeInsets.all(12),

@@ -17,7 +17,7 @@ class ParametersComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const TitleText(title: "Parameters"),
+            TitleText(title: "Parameters"),
             TextButton(
               onPressed: () {
                 Provider.of<HomeProvider>(context, listen: false)

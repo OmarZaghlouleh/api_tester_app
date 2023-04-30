@@ -43,7 +43,7 @@ class APITester extends StatelessWidget {
             ),
           ),
         ),
-        home: const HomeScreen(),
+        home: HomeScreen(),
       ),
     );
   }

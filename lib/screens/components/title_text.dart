@@ -2,10 +2,14 @@ import 'package:api_tester_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../utils/styles.dart';
+
 class TitleText extends StatelessWidget {
-  const TitleText({required this.title, super.key});
+  TitleText(
+      {required this.title, this.color = AppColors.primaryColor, super.key});
 
   final String title;
+  Color color = AppColors.primaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +19,9 @@ class TitleText extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           "- $title",
-          style: GoogleFonts.lalezar(
-            color: AppColors.primaryColor,
-            //fontWeight: FontWeight.w600,
+          style: appTextStyle(
             fontSize: 18,
+            color: color,
           ),
         ),
       ),
