@@ -9,6 +9,7 @@ class Group {
     required this.name,
     required this.folders,
   });
+  factory Group.empty() => const Group(name: "", folders: []);
 
   factory Group.fromJson(Map<dynamic, dynamic> json) {
     List<Folder> folders = [];

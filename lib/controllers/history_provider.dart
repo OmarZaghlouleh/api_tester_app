@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:api_tester_app/classes/request_class.dart';
@@ -6,7 +5,6 @@ import 'package:api_tester_app/classes/response_class.dart';
 import 'package:api_tester_app/functions/storage_functions.dart';
 import 'package:api_tester_app/utils/constants.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HistoryProvider with ChangeNotifier {

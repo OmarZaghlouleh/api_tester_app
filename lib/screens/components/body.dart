@@ -24,7 +24,7 @@ class BodyComponent extends StatelessWidget {
           children: [
             Row(
               children: [
-                const TitleText(title: "Body"),
+                TitleText(title: "Body"),
                 Consumer<HomeProvider>(
                   builder: (context, value, child) => StatusCheck(
                       isTrue: value.getOverAllBodyStatus,

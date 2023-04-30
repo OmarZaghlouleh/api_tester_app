@@ -13,6 +13,12 @@ class AppColors {
   static const Color requestTitleColor = accentColor;
   static const Color errorColor = Colors.red;
   static const Color successColor = Colors.green;
-  static Color drawerColor = primaryColor.withOpacity(0.5);
+  static Color drawerColor = Colors.black54.withOpacity(0.9);
+  static Color popupbuttonBackgroundColor = Colors.black54.withOpacity(0.9);
+
   static const Color drawerTextColor = Colors.white70;
+  static const Color popUpRowcolor = Colors.white70;
+  static const Color unSelectedgroupFolderColor = Colors.grey;
+  static const Color selectedgroupFolderColor = accentColor;
+  static const Color groupColor = primaryColor;
 }
