@@ -16,9 +16,13 @@ A new mobile and desktop application to test your API and see the response.
 # Features
 1- Your request will be saved on storage so you can retest it again.
 
+2- Groups.
+
 # Upcoming features
 
 1- Upload files.
+
+
 
 # Try it now
 
