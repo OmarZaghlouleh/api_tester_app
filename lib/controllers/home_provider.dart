@@ -4,11 +4,7 @@ import 'package:api_tester_app/classes/request_class.dart';
 import 'package:api_tester_app/classes/response_class.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
-import 'package:api_tester_app/functions/delete.dart';
-import 'package:api_tester_app/functions/get.dart';
-import 'package:api_tester_app/functions/post.dart';
-import 'package:api_tester_app/functions/put.dart';
-import 'package:api_tester_app/functions/storage_functions.dart';
+
 import 'package:api_tester_app/functions/test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +96,7 @@ class HomeProvider with ChangeNotifier {
     TextEditingController valueController = TextEditingController();
 
     keyController.addListener(() {
+      log("sadasd");
       setHeader();
     });
 
@@ -240,7 +237,7 @@ class HomeProvider with ChangeNotifier {
       {required BuildContext context}) async {
     toggleIsLoading();
 
-    if (getOverAllBodyStatus == false) {
+    if (getOverAllUrlStatus == false) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Invalid url")));
       toggleIsLoading();

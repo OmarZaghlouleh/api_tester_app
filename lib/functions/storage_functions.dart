@@ -168,3 +168,63 @@ Future<Either<Failure, Group>> addTestToFolderInStorage(
     return Left(Failure(message: e.toString()));
   }
 }
+
+Future<Either<Failure, Group>> deleteTestFromFolderStorage(
+    {required String groupName,
+    required String folderName,
+    required APIRequest apiRequest,
+    required APIResponse apiResponse}) async {
+  try {
+    final box = Hive.box(AppConstants.groupsBox);
+
+    List<MapEntry> data = getHiveMapValue(box: box);
+
+    Group oldGroup = Group.fromJson(data
+        .firstWhere(
+            (element) => Group.fromJson(element.value).name == groupName)
+        .value);
+
+    int index =
+        oldGroup.folders.indexWhere((element) => element.name == folderName);
+    Folder oldFolder =
+        oldGroup.folders.firstWhere((element) => element.name == folderName);
+    oldGroup.folders.removeWhere((element) => element.name == folderName);
+
+    oldFolder.requests.removeWhere((element) => element.key == apiRequest);
+    oldGroup.folders.insert(index, oldFolder);
+
+    final deleteResult = await deleteGroupFromStorage(name: groupName);
+    return await addGroupToStorage(name: groupName, group: oldGroup);
+  } catch (e) {
+    if (kDebugMode) log("Add test $e");
+    return Left(Failure(message: e.toString()));
+  }
+}
+
+Future<Either<Failure, Group>> deleteFolderFromGroupStorage({
+  required String groupName,
+  required String folderName,
+}) async {
+  try {
+    final box = Hive.box(AppConstants.groupsBox);
+
+    List<MapEntry> data = getHiveMapValue(box: box);
+
+    Group oldGroup = Group.fromJson(data
+        .firstWhere(
+            (element) => Group.fromJson(element.value).name == groupName)
+        .value);
+
+    int index =
+        oldGroup.folders.indexWhere((element) => element.name == folderName);
+    Folder oldFolder =
+        oldGroup.folders.firstWhere((element) => element.name == folderName);
+    oldGroup.folders.removeWhere((element) => element.name == folderName);
+
+    final deleteResult = await deleteGroupFromStorage(name: groupName);
+    return await addGroupToStorage(name: groupName, group: oldGroup);
+  } catch (e) {
+    if (kDebugMode) log("Add test $e");
+    return Left(Failure(message: e.toString()));
+  }
+}

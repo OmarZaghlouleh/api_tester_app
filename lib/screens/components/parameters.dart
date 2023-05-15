@@ -18,14 +18,19 @@ class ParametersComponent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TitleText(title: "Parameters"),
-            TextButton(
-              onPressed: () {
-                Provider.of<HomeProvider>(context, listen: false)
-                    .addParametersController();
-              },
-              child: const Text(
-                "+ Field",
-                style: TextStyle(color: AppColors.textButtonColor),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Provider.of<HomeProvider>(context, listen: false)
+                        .addParametersController();
+                  },
+                  child: const Text(
+                    "+ Field",
+                    style: TextStyle(color: AppColors.textButtonColor),
+                  ),
+                ),
               ),
             )
           ],

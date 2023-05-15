@@ -6,6 +6,7 @@ import 'package:api_tester_app/classes/response_class.dart';
 import 'package:api_tester_app/extensions/update_list_element+extension.dart';
 import 'package:api_tester_app/functions/snackbar.dart';
 import 'package:api_tester_app/functions/storage_functions.dart';
+import 'package:api_tester_app/screens/group/groups_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -71,6 +72,10 @@ class GroupsProvider with ChangeNotifier {
     result.fold((l) {
       showCustomSnackBar(context: context, message: l.message);
     }, (r) {
+      if (_groups
+          .firstWhere((element) => element.name == name)
+          .folders
+          .contains(_selectedFolder)) _selectedFolder = null;
       _groups.removeWhere((element) => element.name == name);
       notifyListeners();
     });
@@ -90,7 +95,59 @@ class GroupsProvider with ChangeNotifier {
 
     result.fold((l) {
       showCustomSnackBar(context: context, message: l.message);
-    }, (r) {});
+    }, (r) {
+      int index = _groups.indexWhere((element) => element.name == groupName);
+      _groups.removeWhere((element) => element.name == groupName);
+      _groups.insert(index, r);
+      notifyListeners();
+    });
+  }
+
+  Future<void> deleteTestFromFolder(
+      {required String folderName,
+      required String groupName,
+      required APIRequest apiRequest,
+      required APIResponse apiResponse,
+      required BuildContext context}) async {
+    final result = await deleteTestFromFolderStorage(
+      groupName: groupName,
+      folderName: folderName,
+      apiRequest: apiRequest,
+      apiResponse: apiResponse,
+    );
+
+    result.fold((l) {
+      showCustomSnackBar(context: context, message: l.message);
+    }, (r) {
+      _groups
+          .firstWhere((element) => element.name == groupName)
+          .folders
+          .firstWhere((element) => element.name == folderName)
+          .requests
+          .removeWhere((element) => element.key == apiRequest);
+      notifyListeners();
+    });
+  }
+
+  Future<void> deleteFolderFromGroup(
+      {required String folderName,
+      required String groupName,
+      required BuildContext context}) async {
+    final result = await deleteFolderFromGroupStorage(
+      groupName: groupName,
+      folderName: folderName,
+    );
+
+    result.fold((l) {
+      showCustomSnackBar(context: context, message: l.message);
+    }, (r) {
+      _groups
+          .firstWhere((element) => element.name == groupName)
+          .folders
+          .removeWhere((element) => element.name == folderName);
+
+      notifyListeners();
+    });
   }
 
   List<Group> get getGroups => _groups;
