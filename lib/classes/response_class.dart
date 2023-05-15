@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 import 'package:api_tester_app/functions/try_decode.dart';
 
-class APIResponse {
+class APIResponse extends Equatable {
   final int statusCode;
   final String body;
   final bool isException;
@@ -28,4 +30,7 @@ class APIResponse {
     required this.isException,
     required this.body,
   });
+
+  @override
+  List<Object> get props => [statusCode, body, isException];
 }

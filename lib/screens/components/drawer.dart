@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../enums/icon_size.dart';
-import '../history_screen.dart';
+import '../history/history_screen.dart';
 import 'app_icon.dart';
 
 class CustomDrawer extends StatelessWidget {

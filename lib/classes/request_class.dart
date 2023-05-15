@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 
+import 'package:equatable/equatable.dart';
+
 import 'package:api_tester_app/enums/request_types.dart';
 
-class APIRequest {
+class APIRequest extends Equatable {
   String url;
   Map<dynamic, dynamic> parameters;
   Map<dynamic, dynamic> header;
@@ -49,4 +51,16 @@ class APIRequest {
     required this.method,
     this.encodeBody = false,
   });
+
+  @override
+  List<Object> get props {
+    return [
+      url,
+      parameters,
+      header,
+      body,
+      encodeBody,
+      method,
+    ];
+  }
 }

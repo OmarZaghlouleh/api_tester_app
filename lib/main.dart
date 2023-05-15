@@ -1,7 +1,7 @@
 import 'package:api_tester_app/controllers/groups_provider.dart';
 import 'package:api_tester_app/controllers/history_provider.dart';
 import 'package:api_tester_app/controllers/home_provider.dart';
-import 'package:api_tester_app/screens/home_screen.dart';
+import 'package:api_tester_app/screens/home/home_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:api_tester_app/utils/constants.dart';
 import 'package:flutter/material.dart';
