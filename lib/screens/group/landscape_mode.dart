@@ -1,11 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:api_tester_app/classes/folder.dart';
 import 'package:api_tester_app/controllers/groups_provider.dart';
-import 'package:api_tester_app/extensions/map_print_extension.dart';
 import 'package:api_tester_app/screens/components/custom_pop_up_item.dart';
 import 'package:api_tester_app/screens/components/dialog.dart';
-import 'package:api_tester_app/screens/components/request_row.dart';
 import 'package:api_tester_app/screens/components/test_card.dart';
-import 'package:api_tester_app/screens/home_screen.dart';
+import 'package:api_tester_app/screens/home/home_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:api_tester_app/utils/constants.dart';
 import 'package:api_tester_app/utils/styles.dart';
@@ -149,7 +149,7 @@ class GroupsLandscapeMode extends StatelessWidget {
                                                       groupName: group.name,
                                                       folderName: folder.name);
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.delete,
                                               color: AppColors.errorColor,
                                             ),

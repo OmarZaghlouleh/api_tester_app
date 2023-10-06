@@ -12,7 +12,7 @@ class RequestRow extends StatelessWidget {
       children: [
         RequestTitleText(title: title),
         Expanded(
-          child: Text(
+          child: SelectableText(
             data,
           ),
         ),

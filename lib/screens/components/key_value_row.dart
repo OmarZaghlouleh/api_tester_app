@@ -6,12 +6,14 @@ class KeyValueRow extends StatelessWidget {
       {required this.keyController,
       required this.valueController,
       this.isValueList = false,
+      this.maxLength = 25,
       this.textInputType = TextInputType.text,
       super.key});
   final TextEditingController keyController;
   final TextEditingController valueController;
   TextInputType textInputType;
   bool isValueList;
+  int maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,10 @@ class KeyValueRow extends StatelessWidget {
       child: Column(
         children: [
           Row(
+            //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
+                flex: 2,
                 child: CustomTextField(
                   label: "Key",
                   prefix: null,
@@ -31,10 +35,11 @@ class KeyValueRow extends StatelessWidget {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.only(bottom: 25, left: 8.0, right: 8.0),
                 child: Text(":"),
               ),
               Expanded(
+                flex: 4,
                 child: CustomTextField(
                   textInputType: textInputType,
                   label: "Value",
@@ -42,15 +47,12 @@ class KeyValueRow extends StatelessWidget {
                   prefix: null,
                   controller: valueController,
                   hintText: "",
+                  maxLength: maxLength,
                 ),
               )
             ],
           ),
-          if (isValueList == true)
-            const Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: Text("split each item with ','  e.g. 1,2,3"),
-            ),
+          if (isValueList == true) const Text("split each item with ','  e.g. 1,2,3"),
         ],
       ),
     );

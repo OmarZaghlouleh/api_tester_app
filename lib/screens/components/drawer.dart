@@ -1,10 +1,8 @@
 import 'package:api_tester_app/screens/group/groups_screen.dart';
-import 'package:api_tester_app/utils/assets.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:api_tester_app/utils/styles.dart';
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../enums/icon_size.dart';
 import '../history_screen.dart';
@@ -64,7 +62,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GroupsScreen(),
+                      builder: (context) => const GroupsScreen(),
                     ),
                   );
                 },

@@ -1,6 +1,5 @@
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../utils/styles.dart';
 

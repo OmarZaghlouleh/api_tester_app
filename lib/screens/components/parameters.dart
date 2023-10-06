@@ -40,16 +40,30 @@ class ParametersComponent extends StatelessWidget {
                         child: KeyValueRow(
                           keyController: e.key,
                           valueController: e.value,
+                          maxLength: 250,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 25),
+                        child: SizedBox(
+                          width: 10,
+                          height: 30,
+                          child: VerticalDivider(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                       Consumer<HomeProvider>(
-                        builder: (context, value, child) => IconButton(
-                          onPressed: () {
-                            value.deleteParametersController(key: e.key);
-                          },
-                          icon: const Icon(
-                            Icons.close_rounded,
-                            color: Colors.red,
+                        builder: (context, value, child) => Padding(
+                          padding: const EdgeInsets.only(bottom: 25),
+                          child: IconButton(
+                            onPressed: () {
+                              value.deleteParametersController(key: e.key);
+                            },
+                            icon: const Icon(
+                              Icons.delete_rounded,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),

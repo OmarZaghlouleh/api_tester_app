@@ -1,10 +1,7 @@
 import 'package:api_tester_app/controllers/home_provider.dart';
-import 'package:api_tester_app/extensions/map_print_extension.dart';
 import 'package:api_tester_app/screens/components/key_value_row.dart';
 import 'package:api_tester_app/screens/components/title_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/colors.dart';
@@ -42,16 +39,30 @@ class HeaderComponent extends StatelessWidget {
                         child: KeyValueRow(
                           keyController: e.key,
                           valueController: e.value,
+                          maxLength: 250,
                         ),
                       ),
-                      Consumer<HomeProvider>(
-                        builder: (context, value, child) => IconButton(
-                          onPressed: () {
-                            value.deleteHeaderController(key: e.key);
-                          },
-                          icon: const Icon(
-                            Icons.close_rounded,
-                            color: Colors.red,
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 25),
+                        child: SizedBox(
+                          width: 10,
+                          height: 30,
+                          child: VerticalDivider(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 25),
+                        child: Consumer<HomeProvider>(
+                          builder: (context, value, child) => IconButton(
+                            onPressed: () {
+                              value.deleteHeaderController(key: e.key);
+                            },
+                            icon: const Icon(
+                              Icons.delete_rounded,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),
