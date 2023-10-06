@@ -8,12 +8,12 @@ void showNameDialog({
   required String title,
   required Function({required String name}) function,
 }) {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   showDialog(
       context: context,
       builder: (BuildContext ctx) {
-        _nameController.clear();
+        nameController.clear();
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -23,23 +23,23 @@ void showNameDialog({
             prefix: null,
             onSubmit: () async {
               Navigator.pop(ctx);
-              await function(name: _nameController.text.trim());
-              _nameController.text.trim();
-              _nameController.clear();
+              await function(name: nameController.text.trim());
+              nameController.text.trim();
+              nameController.clear();
             },
             suffix: IconButton(
               onPressed: () async {
                 Navigator.pop(ctx);
-                await function(name: _nameController.text.trim());
-                _nameController.text.trim();
-                _nameController.clear();
+                await function(name: nameController.text.trim());
+                nameController.text.trim();
+                nameController.clear();
               },
               icon: const Icon(
                 Icons.add_rounded,
                 color: AppColors.accentColor,
               ),
             ),
-            controller: _nameController,
+            controller: nameController,
             hintText: "",
           ),
         );

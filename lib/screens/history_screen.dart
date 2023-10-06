@@ -1,14 +1,9 @@
-import 'dart:developer';
 
 import 'package:api_tester_app/controllers/history_provider.dart';
-import 'package:api_tester_app/extensions/map_print_extension.dart';
 import 'package:api_tester_app/screens/components/app_bar.dart';
-import 'package:api_tester_app/screens/components/request_row.dart';
 import 'package:api_tester_app/screens/components/test_card.dart';
-import 'package:api_tester_app/screens/response_screen.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class Test {}

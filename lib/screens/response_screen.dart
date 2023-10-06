@@ -112,7 +112,7 @@ class _ResponseScreenState extends State<ResponseScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: Text(
+                      child: SelectableText(
                         widget.response.body,
                         style: appTextStyle(
                           fontSize: 18,

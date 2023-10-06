@@ -1,13 +1,11 @@
-import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/extensions/int_extension.dart';
 import 'package:api_tester_app/screens/components/custom_text_field.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void showCustomModalBottomSheet({required BuildContext context}) {
-  final TextEditingController _keyController = TextEditingController();
-  final TextEditingController _valueController = TextEditingController();
+  final TextEditingController keyController = TextEditingController();
+  final TextEditingController valueController = TextEditingController();
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -28,14 +26,14 @@ void showCustomModalBottomSheet({required BuildContext context}) {
                 label: "Key",
                 prefix: null,
                 suffix: null,
-                controller: _keyController,
+                controller: keyController,
                 hintText: ""),
             10.wh(),
             CustomTextField(
                 label: "Value",
                 prefix: null,
                 suffix: null,
-                controller: _valueController,
+                controller: valueController,
                 hintText: ""),
             15.wh(),
             ElevatedButton(

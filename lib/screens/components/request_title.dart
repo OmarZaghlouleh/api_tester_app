@@ -1,7 +1,6 @@
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:api_tester_app/utils/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RequestTitleText extends StatelessWidget {
   const RequestTitleText({required this.title, super.key});

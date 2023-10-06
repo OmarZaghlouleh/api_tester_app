@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.api_tester_app">
+    <uses-permission android:name="android.permission.INTERNET" /> 
    <application
-        android:label="api_tester_app"
-        android:name="${applicationName}"
+        android:label="API Tester"
+        android:name="API Tester"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

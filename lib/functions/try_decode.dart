@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:api_tester_app/extensions/map_print_extension.dart';
 

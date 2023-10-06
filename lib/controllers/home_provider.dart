@@ -4,11 +4,6 @@ import 'package:api_tester_app/classes/request_class.dart';
 import 'package:api_tester_app/classes/response_class.dart';
 import 'package:api_tester_app/enums/http_types.dart';
 import 'package:api_tester_app/enums/request_types.dart';
-import 'package:api_tester_app/functions/delete.dart';
-import 'package:api_tester_app/functions/get.dart';
-import 'package:api_tester_app/functions/post.dart';
-import 'package:api_tester_app/functions/put.dart';
-import 'package:api_tester_app/functions/storage_functions.dart';
 import 'package:api_tester_app/functions/test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +25,17 @@ class HomeProvider with ChangeNotifier {
   bool _overallBodyStatus = true;
   bool _overallUrlStatus = false;
   bool _isLoading = false;
+  bool _isScrolling = false;
   String _parameters = "";
 
   final APIRequest _apiRequest = APIRequest.empty();
+
+  void setScrollingState({required bool state}) {
+    if (_isScrolling != state) {
+      _isScrolling = state;
+      notifyListeners();
+    }
+  }
 
   void toggleEncodedBody() {
     getRequestData.encodeBody = !getRequestData.encodeBody;
@@ -48,7 +51,7 @@ class HomeProvider with ChangeNotifier {
       final String value =
           _parametersControllers.entries.elementAt(i).value.text.trim();
 
-      parameter = "${key}=$value";
+      parameter = "$key=$value";
       if (i == 0) {
         parameter = "?$parameter";
       } else {
@@ -210,6 +213,8 @@ class HomeProvider with ChangeNotifier {
         } catch (error) {
           setOverallBodyStatus(status: false);
         }
+      } else {
+        setOverallBodyStatus(status: false);
       }
     }
     _apiRequest.body = newBody;
@@ -240,7 +245,7 @@ class HomeProvider with ChangeNotifier {
       {required BuildContext context}) async {
     toggleIsLoading();
 
-    if (getOverAllBodyStatus == false) {
+    if (getOverAllUrlStatus == false) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Invalid url")));
       toggleIsLoading();
@@ -274,5 +279,6 @@ class HomeProvider with ChangeNotifier {
   bool get getOverAllBodyStatus => _overallBodyStatus;
   bool get getOverAllUrlStatus => _overallUrlStatus;
   bool get getIsLoading => _isLoading;
+  bool get getIsScrolling => _isScrolling;
   String get getParameters => _parameters;
 }

@@ -1,8 +1,6 @@
-import 'package:api_tester_app/controllers/home_provider.dart';
 import 'package:api_tester_app/utils/colors.dart';
 import 'package:api_tester_app/utils/shadows.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ActionButton extends StatelessWidget {
   const ActionButton(
