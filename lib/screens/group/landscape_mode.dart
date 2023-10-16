@@ -39,6 +39,12 @@ class GroupsLandscapeMode extends StatelessWidget {
                     children: groupSettings.getGroups
                         .map(
                           (group) => ExpansionTile(
+                            initiallyExpanded:
+                                groupSettings.getSelectedGroup != null &&
+                                        groupSettings.getSelectedGroup!.name ==
+                                            group.name
+                                    ? true
+                                    : false,
                             onExpansionChanged: (value) {
                               if (value) {
                                 groupSettings.changeSelectedGroup(group: group);
@@ -107,8 +113,7 @@ class GroupsLandscapeMode extends StatelessWidget {
                                   (folder) => InkWell(
                                     onTap: () {
                                       groupSettings.setSelectedFolder(
-                                          folder: folder,
-                                          groupName: group.name);
+                                          folder: folder, group: group);
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 50),
@@ -223,7 +228,8 @@ class GroupsLandscapeMode extends StatelessWidget {
                                                     Provider.of<GroupsProvider>(
                                                             context,
                                                             listen: false)
-                                                        .getSelectedGroupName,
+                                                        .getSelectedGroup!
+                                                        .name,
                                               ),
                                             ),
                                           );
@@ -273,7 +279,8 @@ class GroupsLandscapeMode extends StatelessWidget {
                                                                       context,
                                                                       listen:
                                                                           false)
-                                                                  .getSelectedGroupName,
+                                                                  .getSelectedGroup!
+                                                                  .name,
                                                               apiRequest:
                                                                   folder
                                                                       .requests[
@@ -308,7 +315,8 @@ class GroupsLandscapeMode extends StatelessWidget {
                                                                       context,
                                                                       listen:
                                                                           false)
-                                                                  .getSelectedGroupName,
+                                                                  .getSelectedGroup!
+                                                                  .name,
                                                               apiRequest:
                                                                   folder
                                                                       .requests[

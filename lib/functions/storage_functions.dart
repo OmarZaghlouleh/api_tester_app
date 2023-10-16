@@ -178,11 +178,11 @@ Future<Either<Failure, Group>> addTestToFolderInStorage(
     final box = Hive.box(AppConstants.groupsBox);
 
     List<MapEntry> data = getHiveMapValue(box: box);
+
     Group oldGroup = Group.fromJson(data
         .firstWhere(
             (element) => Group.fromJson(element.value).name == groupName)
         .value);
-
     int index =
         oldGroup.folders.indexWhere((element) => element.name == folderName);
     Folder oldFolder =
@@ -208,6 +208,7 @@ Future<Either<Failure, Group>> deleteTestFromFolderInStorage(
     required int index,
     required APIResponse apiResponse}) async {
   try {
+    log(groupName);
     final box = Hive.box(AppConstants.groupsBox);
 
     List<MapEntry> data = getHiveMapValue(box: box);
@@ -227,7 +228,7 @@ Future<Either<Failure, Group>> deleteTestFromFolderInStorage(
     final deleteResult = await deleteGroupFromStorage(name: groupName);
     return await addGroupToStorage(name: groupName, group: oldGroup);
   } catch (e) {
-    if (kDebugMode) log("Add test $e");
+    if (kDebugMode) log("Delete test $e");
     return Left(Failure(message: e.toString()));
   }
 }

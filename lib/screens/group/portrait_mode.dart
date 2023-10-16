@@ -355,7 +355,8 @@ class GroupsPortraitMode extends StatelessWidget {
                                                 Provider.of<GroupsProvider>(
                                                         context,
                                                         listen: false)
-                                                    .getSelectedGroupName,
+                                                    .getSelectedGroup!
+                                                    .name,
                                             apiRequest: groupSettings
                                                 .getSelectedFolder!
                                                 .requests[index]
@@ -385,7 +386,8 @@ class GroupsPortraitMode extends StatelessWidget {
                                                 Provider.of<GroupsProvider>(
                                                         context,
                                                         listen: false)
-                                                    .getSelectedGroupName,
+                                                    .getSelectedGroup!
+                                                    .name,
                                             apiRequest: groupSettings
                                                 .getSelectedFolder!
                                                 .requests[index]
