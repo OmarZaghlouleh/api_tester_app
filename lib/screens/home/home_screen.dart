@@ -100,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 apiRequest: value.getRequestData,
                                 apiResponse: r,
                                 context: context);
+                        Navigator.pop(context);
                       } else {
                         Navigator.push(
                           context,

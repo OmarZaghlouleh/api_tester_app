@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "api_tester_app" "\0"
+            VALUE "FileDescription", "API Tester" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "api_tester_app" "\0"
+            VALUE "InternalName", "API Tester" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "api_tester_app.exe" "\0"
-            VALUE "ProductName", "api_tester_app" "\0"
+            VALUE "OriginalFilename", "API Tester.exe" "\0"
+            VALUE "ProductName", "API Tester" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

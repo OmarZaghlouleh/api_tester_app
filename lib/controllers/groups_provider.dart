@@ -17,11 +17,11 @@ class GroupsProvider with ChangeNotifier {
   List<Group> _groups = [];
   Folder? _selectedFolder;
   Group? _selectedGroup;
-  String _selectedGroupName = "";
+  // String _selectedGroupName = "";
 
-  void setSelectedFolder({required Folder folder, required String groupName}) {
+  void setSelectedFolder({required Folder folder, required Group group}) {
     log(folder.requests.toString());
-    _selectedGroupName = groupName;
+    _selectedGroup = group;
     _selectedFolder = folder;
     log("dsdsadd");
     notifyListeners();
@@ -140,6 +140,7 @@ class GroupsProvider with ChangeNotifier {
       required APIRequest apiRequest,
       required APIResponse apiResponse,
       required BuildContext context}) async {
+    log(groupName + "aaaaaaa");
     final result = await addTestToFolderInStorage(
         groupName: groupName,
         folderName: folderName,
@@ -166,6 +167,7 @@ class GroupsProvider with ChangeNotifier {
       required APIRequest apiRequest,
       required APIResponse apiResponse,
       required BuildContext context}) async {
+    log(groupName + "asdasdsad");
     final result = await deleteTestFromFolderInStorage(
         index: index,
         groupName: groupName,
@@ -189,5 +191,5 @@ class GroupsProvider with ChangeNotifier {
   List<Group> get getGroups => _groups;
   Folder? get getSelectedFolder => _selectedFolder;
   Group? get getSelectedGroup => _selectedGroup;
-  String get getSelectedGroupName => _selectedGroupName;
+  // String get getSelectedGroupName => _selectedGroupName;
 }
