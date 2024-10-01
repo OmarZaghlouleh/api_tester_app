@@ -22,17 +22,4 @@ A new mobile and desktop application to test your API and see the response.
 
 
 
-# Try it now
-
-
-Windows:
-
-[![Google Drive](https://img.shields.io/badge/Google%20Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/12A0KDONxMyXoauRngn8xBXFeIsV8CYwi/view?usp=sharing)
-
-Android:
-
-[![Google Drive](https://img.shields.io/badge/Google%20Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1VcuAhm-AL5JSuDOFtb6sV-VgMDBV4hxw/view?usp=sharing)
-
-
-
 
